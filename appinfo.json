@@ -3,11 +3,17 @@
     "capabilities": [
         ""
     ],
-    "companyName": "dmuhle@gmail.com",
+    "companyName": "Daniel Muhle (dmuhle at gmail dot com)",
     "longName": "time-tracker",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+       {
+         "type" : "raw",
+         "name" "ICON_CALENDAR_ITEM",
+         "file" : "pebble_calendar_template.pdc"
+       }
+     ]
     },
     "sdkVersion": "3",
     "shortName": "time-tracker",
@@ -15,5 +21,5 @@
     "versionLabel": "1.0",
     "watchapp": {
         "watchface": false
-    }
+    },
 }
