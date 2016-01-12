@@ -1,0 +1,19 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "dmuhle@gmail.com",
+    "longName": "time-tracker",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "time-tracker",
+    "uuid": "701e1e5f-f441-4b5a-9cdf-5ab16169d68c",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
