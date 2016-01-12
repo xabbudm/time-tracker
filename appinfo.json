@@ -8,11 +8,11 @@
     "projectType": "native",
     "resources": {
         "media": [
-       {
-         "type" : "raw",
-         "name" "ICON_CALENDAR_ITEM",
-         "file" : "pebble_calendar_template.pdc"
-       }
+        {
+          "type" : "raw",
+          "name" : "ICON_CALENDAR_ITEM",
+          "file" : "pebble_calendar_template.pdc"
+        }
      ]
     },
     "sdkVersion": "3",
