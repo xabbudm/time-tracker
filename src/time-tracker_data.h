@@ -61,6 +61,7 @@ typedef struct {
   time_t start;
   time_t stop;
   uint16_t pause;
+  char* description;
 } TTrackerAppDataPoint;
 
 typedef struct {

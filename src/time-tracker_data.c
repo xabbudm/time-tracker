@@ -32,9 +32,9 @@ void ttracker_app_main_window_view_model_announce_changed(TTrackerAppMainWindowV
     
 void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, int16_t pause) 
 {
-    model->worktime.start = start;
-    model->worktime.stop = stop;
-    model->worktime.pause = pause;
+    model->work_time.start = start;
+    model->work_time.stop = stop;
+    model->work_time.pause = pause;
     
     struct tm* start_time = localtime(&start);
     struct tm* end_time = localtime(&stop);
@@ -60,120 +60,134 @@ TTrackerDataViewNumbers ttracker_app_data_point_view_model_times(TTrackerAppData
       .start = data_point->start,
       .stop  = data_point->stop,
       .pause = data_point->pause,
+      .total_hours = 0
   };
 }
 
-int weather_app_index_of_data_point(WeatherAppDataPoint *dp);
+int ttracker_app_index_of_data_point(TTrackerAppDataPoint *dp);
 
-void weather_app_view_model_fill_strings_and_pagination(WeatherAppMainWindowViewModel *view_model, WeatherAppDataPoint *data_point) {
-  view_model->city = data_point->city;
+void ttracker_app_view_model_fill_strings_and_pagination(TTrackerAppMainWindowViewModel *view_model, TTrackerAppDataPoint *data_point) {
+  view_model->day_of_week = data_point->day_of_week;
   view_model->description = data_point->description;
 
-  view_model->pagination.idx = (int16_t)(1 + weather_app_index_of_data_point(data_point));
-  view_model->pagination.num = (int16_t)weather_app_num_data_points();
-  snprintf(view_model->pagination.text, sizeof(view_model->pagination.text), "%d/%d", view_model->pagination.idx, view_model->pagination.num);
-  weather_app_main_window_view_model_announce_changed(view_model);
+  view_model->pagination.idx = (int16_t)(1 + ttracker_app_index_of_data_point(data_point));
+  view_model->pagination.num = (int16_t)ttracker_num_data_points();
+  snprintf(view_model->pagination.text, sizeof(view_model->pagination.text), "%02d/%02d", view_model->pagination.idx, view_model->pagination.num);
+  ttracker_app_main_window_view_model_announce_changed(view_model);
 }
 
 
-GDrawCommandImage *weather_app_data_point_create_icon(WeatherAppDataPoint *data_point) {
-  return weather_app_resources_get_icon(data_point->icon);
+
+
+void ttracker_view_model_fill_numbers(TTrackerAppMainWindowViewModel *model, TTrackerDataViewNumbers numbers) 
+{
+  ttracker_app_view_model_set_work_hours(model, numbers.total_hours);
+  ttracker_app_view_model_set_work_times(model, numbers.start, numbers.stop, numbers.pause);
 }
 
-
-void weather_view_model_fill_numbers(WeatherAppMainWindowViewModel *model, WeatherDataViewNumbers numbers) {
-  weather_app_view_model_set_temperature(model, numbers.temperature);
-  weather_app_view_model_set_highlow(model, numbers.high, numbers.low);
-}
-
-void weather_app_view_model_fill_colors(WeatherAppMainWindowViewModel *model, GColor color) {
+void ttracker_app_view_model_fill_colors(TTrackerAppMainWindowViewModel *model, GColor color) 
+{
   model->bg_color.top = color;
   model->bg_color.bottom = color;
-  weather_app_main_window_view_model_announce_changed(model);
+  ttracker_app_main_window_view_model_announce_changed(model);
 }
 
-GColor weather_app_data_point_color(WeatherAppDataPoint *data_point) {
-  return data_point->current > 90 ? GColorOrange : GColorPictonBlue;
+GColor  ttracker_app_data_point_color(TTrackerAppDataPoint *data_point)
+{
+    // make color dependend on total work time
+    // return data_point->current > 90 ? GColorOrange : GColorPictonBlue;
+    return GColorPictonBlue;
 }
 
-void weather_app_view_model_fill_all(WeatherAppMainWindowViewModel *model, WeatherAppDataPoint *data_point) {
-  WeatherAppMainWindowViewModelFunc annouce_changed = model->announce_changed;
+void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, TTrackerAppDataPoint *data_point);
+{
+  TTrackerAppMainWindowViewModelFunc annouce_changed = model->announce_changed;
   memset(model, 0, sizeof(*model));
   model->announce_changed = annouce_changed;
-  weather_app_view_model_fill_strings_and_pagination(model, data_point);
-  weather_app_view_model_set_icon(model, weather_app_data_point_create_icon(data_point));
-  weather_app_view_model_fill_colors(model, weather_app_data_point_color(data_point));
-  weather_view_model_fill_numbers(model, weather_app_data_point_view_model_numbers(data_point));
+  ttracker_app_view_model_fill_strings_and_pagination(model, data_point);
+  ttracker_app_view_model_set_icon(model, ttracker_app_resources_get_icon());
+  ttracker_app_view_model_fill_colors(model, ttracker_app_data_point_color(data_point));
+  ttracker_view_model_fill_numbers(model, ttracker_app_data_point_view_model_times(data_point));
 
-  weather_app_main_window_view_model_announce_changed(model);
+  ttracker_app_main_window_view_model_announce_changed(model);
 }
 
-void weather_app_view_model_deinit(WeatherAppMainWindowViewModel *model) {
-  weather_app_view_model_set_icon(model, NULL);
+void ttracker_app_view_model_deinit(TTrackerAppMainWindowViewModel *model) {
+  ttracker_app_view_model_set_icon(model, NULL);
 }
 
-static WeatherAppDataPoint s_data_points[] = {
+static TTrackerAppDataPoint s_data_points[] = {
     {
-        .city = "PALO ALTO",
-        .description = "Light Rain.",
-        .icon = WEATHER_APP_ICON_LIGHT_RAIN,
-        .current = 68,
-        .high = 70,
-        .low = 60,
+        .day_of_week = "Montag",
+        .description = ":-(",
+        .i_day_of_week = 0,
+        .start = 1452664800,
+        .stop = 1452698100,
+        .pause = 45*60,
     },
     {
-        .city = "LOS ANGELES",
-        .description = "Clear throughout the day.",
-        .icon = WEATHER_APP_ICON_SUNNY_DAY,
-        .current = 100,
-        .high = 100,
-        .low = 80,
+        .day_of_week = "Dienstag",
+        .description = ":-I",
+        .i_day_of_week = 1,
+        .start = 1452751200,
+        .stop = 1452784500,
+        .pause = 45*60,
     },
     {
-        .city = "SAN FRANCISCO",
-        .description = "Rain and Fog.",
-        .icon = WEATHER_APP_ICON_HEAVY_SNOW,
-        .current = 60,
-        .high = 62,
-        .low = 56,
+        .day_of_week = "Mittwoch",
+        .description = ":-)",
+        .i_day_of_week = 2,
+        .start = 1452837600,
+        .stop = 1452870900,
+        .pause = 45*60,
     },
     {
-        .city = "SAN DIEGO",
-        .description = "Surfboard :)",
-        .icon = WEATHER_APP_ICON_GENERIC_WEATHER,
-        .current = 110,
-        .high = 120,
-        .low = 9,
+        .day_of_week = "Donnerstag",
+        .description = ":-()",
+        .i_day_of_week = 3,
+        .start = 1452924000,
+        .stop = 1452957300,
+        .pause = 45*60,
+    },
+    {
+        .day_of_week = "Freitag",
+        .description = ":-()",
+        .i_day_of_week = 4,
+        .start = 1453010400,
+        .stop = 1453032900,
+        .pause = 15*60,
     },
 };
 
-int weather_app_num_data_points(void) {
+int ttracker_app_num_data_points(void) {
   return ARRAY_LENGTH(s_data_points);
 }
 
-WeatherAppDataPoint *weather_app_data_point_at(int idx) {
-  if (idx < 0 || idx > weather_app_num_data_points() - 1) {
+TTrackerAppDataPoint *ttracker_app_data_point_at(int idx) {
+  if (idx < 0 || idx > ttracker_app_num_data_points() - 1) {
     return NULL;
   }
 
   return &s_data_points[idx];
 }
 
-int weather_app_index_of_data_point(WeatherAppDataPoint *dp) {
-  for (int i = 0; i < weather_app_num_data_points(); i++) {
-    if (dp == weather_app_data_point_at(i)) {
+int ttracker_app_index_of_data_point(TTrackerAppDataPoint *dp) {
+  for (int i = 0; i < ttracker_app_num_data_points(); i++) {
+    if (dp == ttracker_app_data_point_at(i)) {
       return i;
     }
   }
   return -1;
 }
 
-WeatherAppDataPoint *weather_app_data_point_delta(WeatherAppDataPoint *dp, int delta) {
-  int idx = weather_app_index_of_data_point(dp);
-  if (idx < 0) {
-    return NULL;
-  }
-  return weather_app_data_point_at(idx + delta);
+TTrackerAppDataPoint *ttracker_app_data_point_delta(TTrackerAppDataPoint *dp, int delta) 
+{
+    int idx = ttracker_app_index_of_data_point(dp);
+    if (idx < 0) 
+    {
+        return NULL;
+    }
+    return ttracker_app_data_point_at(idx + delta);
 }
 
 
