@@ -3,7 +3,7 @@
     "capabilities": [
         ""
     ],
-    "companyName": "Daniel Muhle (dmuhle at gmail dot com)",
+    "companyName": "Daniel Muhle (dmuhle@gmail.com)",
     "longName": "time-tracker",
     "projectType": "native",
     "resources": {
@@ -17,6 +17,11 @@
     },
     "sdkVersion": "3",
     "shortName": "time-tracker",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
     "uuid": "701e1e5f-f441-4b5a-9cdf-5ab16169d68c",
     "versionLabel": "1.0",
     "watchapp": {

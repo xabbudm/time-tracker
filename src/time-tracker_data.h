@@ -31,7 +31,7 @@ typedef struct {
   } bg_color;
   char *day_of_week;
   struct {
-    float  value;
+    int32_t hours;
     char text[8];
   } work_hours;
   struct {
@@ -44,9 +44,9 @@ typedef struct {
     char text[8];
   } pagination;
   struct {
-    int16_t start;
-    int16_t stop;
-    int16_t pause;  
+    time_t start;
+    time_t stop;
+    uint16_t pause;  
     char text[20];
   } work_time;
   char *description;
@@ -57,15 +57,40 @@ void ttracker_app_main_window_view_model_announce_changed(TTrackerAppMainWindowV
 
 typedef struct {
   char *day_of_week;
-  int icon;
-  int16_t start;
-  int16_t stop;
-  int16_t pause;
+  int i_day_of_week;
+  time_t start;
+  time_t stop;
+  uint16_t pause;
 } TTrackerAppDataPoint;
 
 typedef struct {
-  int16_t start;
-  int16_t stop;
-  int16_t pause;
+  time_t start;
+  time_t stop;
+  uint16_t pause;
 } TTrackerDataViewNumbers;
+
+
+void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, uint16_t pause);
+
+void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *model, int32_t hours);
+void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GDrawCommandImage *image);
+
+TTrackerDataViewNumbers ttracker_app_data_point_view_model_times(TTrackerAppDataPoint *data_point);
+
+void ttracker_app_view_model_fill_strings_and_pagination(TTrackerAppMainWindowViewModel *view_model, TTrackerAppDataPoint *data_point);
+
+void ttracker_view_model_fill_numbers(TTrackerAppMainWindowViewModel *model, TTrackerDataViewNumbers numbers);
+
+void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, TTrackerAppDataPoint *data_point);
+
+void ttracker_app_view_model_fill_colors(TTrackerAppMainWindowViewModel *model, GColor color);
+
+void ttracker_app_view_model_deinit(TTrackerAppMainWindowViewModel *model);
+
+GColor ttracker_app_data_point_color(TTrackerAppDataPoint *data_point);
+
+int ttracker_app_num_data_points(void);
+
+TTrackerAppDataPoint *ttracker_app_data_point_at(int idx);
+TTrackerAppDataPoint *ttracker_app_data_point_delta(TTrackerAppDataPoint *dp, int delta);
 
