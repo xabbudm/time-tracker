@@ -8,12 +8,12 @@
     "projectType": "native",
     "resources": {
         "media": [
-        {
-          "type" : "raw",
-          "name" : "ICON_CALENDAR_ITEM",
-          "file" : "pebble_calendar_template.pdc"
-        }
-     ]
+            {
+                "file": "data/pebble_calendar_template.pdc",
+                "name": "ICON_CALENDAR_ITEM",
+                "type": "raw"
+            }
+        ]
     },
     "sdkVersion": "3",
     "shortName": "time-tracker",
