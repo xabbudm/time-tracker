@@ -210,7 +210,7 @@ static void init() {
   TTrackerAppData *data = malloc(sizeof(TTrackerAppData));
   memset(data, 0, sizeof(TTrackerAppData));
 
-  TTrackerAppData *dp = TTrackerAppData(0);
+  TTrackerAppData *dp = ttracker_app_data_point_at(0);
   set_data_point(data, dp);
 
   s_main_window = window_create();
