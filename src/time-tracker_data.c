@@ -22,33 +22,51 @@
 static const uint32_t SECONDS_PER_HOUR   = 3600;
 static const uint32_t SECONDS_PER_MINUTE =   60;
 
-void ttracker_app_main_window_view_model_announce_changed(TTrackerAppMainWindowViewModel *model) 
+void ttracker_app_main_window_view_model_announce_changed(TTrackerAppMainWindowViewModel *model)
 {
-    if (model->announce_changed)     
+    if (model->announce_changed)
     {
         model->announce_changed((struct TTrackerAppMainWindowViewModel *) model);
     }
 }
-    
-void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, uint16_t pause) 
+
+void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, uint16_t pause)
 {
     model->work_time.start = start;
     model->work_time.stop = stop;
     model->work_time.pause = pause;
-    
+
     struct tm* start_time = localtime(&start);
     struct tm* end_time = localtime(&stop);
-    
-     //snprintf(model->highlow.text, sizeof(model->highlow.text), "HI %d°, LO %d°", model->highlow.high, model->highlow.low);
+
+     snprintf(
+         model->work_time.text,
+         sizeof(model->work_time.text),
+         "%02d:%02d - %02d:%02d (%4d)",
+         start_time->tm_hour,
+         start_time->tm_min,
+         end_time->tm_hour,
+         end_time->tm_min,
+         pause);
 }
 
-void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *model, int32_t hours) 
+void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *model, int32_t hours)
 {
     model->work_hours.hours = hours;
-  //snprintf(model->temperature.text, sizeof(model->temperature.text), "%d°", model->temperature.value);
+
+    int hour_part = hours / SECONDS_PER_HOUR;
+    int hour_diff = hours - hour_part*SECONDS_PER_HOUR;
+
+    int minute_part = hour_diff / SECONDS_PER_MINUTE;
+    snprintf(
+        model->work_hours.text,
+        sizeof(model->work_hours.text),
+        "%02d:%02d",
+        hour_part,
+        minute_part);
 }
 
-void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GDrawCommandImage *image) 
+void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GDrawCommandImage *image)
 {
     free(model->icon.draw_command);
     model->icon.draw_command = image;
@@ -56,11 +74,14 @@ void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GDr
 }
 
 TTrackerDataViewNumbers ttracker_app_data_point_view_model_times(TTrackerAppDataPoint *data_point) {
+
+  int time_diff_seconds = data_point->stop - data_point->start - data_point->pause;
+
   return (TTrackerDataViewNumbers){
       .start = data_point->start,
       .stop  = data_point->stop,
       .pause = data_point->pause,
-      .total_hours = 0
+      .total_hours = time_diff_seconds
   };
 }
 
@@ -79,13 +100,13 @@ void ttracker_app_view_model_fill_strings_and_pagination(TTrackerAppMainWindowVi
 
 
 
-void ttracker_view_model_fill_numbers(TTrackerAppMainWindowViewModel *model, TTrackerDataViewNumbers numbers) 
+void ttracker_view_model_fill_numbers(TTrackerAppMainWindowViewModel *model, TTrackerDataViewNumbers numbers)
 {
   ttracker_app_view_model_set_work_hours(model, numbers.total_hours);
   ttracker_app_view_model_set_work_times(model, numbers.start, numbers.stop, numbers.pause);
 }
 
-void ttracker_app_view_model_fill_colors(TTrackerAppMainWindowViewModel *model, GColor color) 
+void ttracker_app_view_model_fill_colors(TTrackerAppMainWindowViewModel *model, GColor color)
 {
   model->bg_color.top = color;
   model->bg_color.bottom = color;
@@ -180,10 +201,10 @@ int ttracker_app_index_of_data_point(TTrackerAppDataPoint *dp) {
   return -1;
 }
 
-TTrackerAppDataPoint *ttracker_app_data_point_delta(TTrackerAppDataPoint *dp, int delta) 
+TTrackerAppDataPoint *ttracker_app_data_point_delta(TTrackerAppDataPoint *dp, int delta)
 {
     int idx = ttracker_app_index_of_data_point(dp);
-    if (idx < 0) 
+    if (idx < 0)
     {
         return NULL;
     }

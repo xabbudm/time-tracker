@@ -46,8 +46,8 @@ typedef struct {
   struct {
     time_t start;
     time_t stop;
-    uint16_t pause;  
-    char text[20];
+    uint16_t pause;
+    char text[32];
   } work_time;
   char *description;
 } TTrackerAppMainWindowViewModel;
@@ -64,13 +64,13 @@ typedef struct {
   char* description;
 } TTrackerAppDataPoint;
 
-typedef struct 
+typedef struct
 {
     time_t start;
     time_t stop;
     uint16_t pause;
     uint16_t total_hours;
-    
+
 } TTrackerDataViewNumbers;
 
 
