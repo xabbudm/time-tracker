@@ -30,7 +30,7 @@ void ttracker_app_main_window_view_model_announce_changed(TTrackerAppMainWindowV
     }
 }
     
-void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, int16_t pause) 
+void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, uint16_t pause) 
 {
     model->work_time.start = start;
     model->work_time.stop = stop;
@@ -71,7 +71,7 @@ void ttracker_app_view_model_fill_strings_and_pagination(TTrackerAppMainWindowVi
   view_model->description = data_point->description;
 
   view_model->pagination.idx = (int16_t)(1 + ttracker_app_index_of_data_point(data_point));
-  view_model->pagination.num = (int16_t)ttracker_num_data_points();
+  view_model->pagination.num = (int16_t)ttracker_app_num_data_points();
   snprintf(view_model->pagination.text, sizeof(view_model->pagination.text), "%02d/%02d", view_model->pagination.idx, view_model->pagination.num);
   ttracker_app_main_window_view_model_announce_changed(view_model);
 }
@@ -99,7 +99,7 @@ GColor  ttracker_app_data_point_color(TTrackerAppDataPoint *data_point)
     return GColorPictonBlue;
 }
 
-void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, TTrackerAppDataPoint *data_point);
+void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, TTrackerAppDataPoint *data_point)
 {
   TTrackerAppMainWindowViewModelFunc annouce_changed = model->announce_changed;
   memset(model, 0, sizeof(*model));
