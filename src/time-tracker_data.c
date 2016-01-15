@@ -77,7 +77,15 @@ void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GBi
 {
     if (0 != image)
     {
-        gbitmap_destroy(model->icon.draw_command);
+        if (0 != model->icon.draw_command)
+        {
+            gbitmap_destroy(model->icon.draw_command);
+        }
+        else
+        {
+            APP_LOG(APP_LOG_LEVEL_DEBUG, "Bitmap was already 0");          
+        }
+        
         model->icon.draw_command = image;
         ttracker_app_main_window_view_model_announce_changed(model);
     }
@@ -137,15 +145,19 @@ GColor  ttracker_app_data_point_color(TTrackerAppDataPoint *data_point)
 
 void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, TTrackerAppDataPoint *data_point)
 {
-  TTrackerAppMainWindowViewModelFunc annouce_changed = model->announce_changed;
-  memset(model, 0, sizeof(*model));
-  model->announce_changed = annouce_changed;
-  ttracker_app_view_model_fill_strings_and_pagination(model, data_point);
-  ttracker_app_view_model_set_icon(model, ttracker_app_resources_get_icon());
-  ttracker_app_view_model_fill_colors(model, ttracker_app_data_point_color(data_point));
-  ttracker_view_model_fill_numbers(model, ttracker_app_data_point_view_model_times(data_point));
+    TTrackerAppMainWindowViewModelFunc annouce_changed = model->announce_changed;
+    GBitmap* image = model->icon.draw_command;
+    
+    memset(model, 0, sizeof(*model));
+    gbitmap_destroy(image);
+    
+    model->announce_changed = annouce_changed;
+    ttracker_app_view_model_fill_strings_and_pagination(model, data_point);
+    ttracker_app_view_model_set_icon(model, ttracker_app_resources_get_icon());
+    ttracker_app_view_model_fill_colors(model, ttracker_app_data_point_color(data_point));
+    ttracker_view_model_fill_numbers(model, ttracker_app_data_point_view_model_times(data_point));
 
-  ttracker_app_main_window_view_model_announce_changed(model);
+    ttracker_app_main_window_view_model_announce_changed(model);
 }
 
 void ttracker_app_view_model_deinit(TTrackerAppMainWindowViewModel *model) 
