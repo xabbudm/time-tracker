@@ -36,18 +36,25 @@ void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *mode
     model->work_time.stop = stop;
     model->work_time.pause = pause;
 
-    struct tm* start_time = localtime(&start);
-    struct tm* end_time = localtime(&stop);
-
-     snprintf(
+    struct tm* my_time = localtime(&start);
+    int start_hour = my_time->tm_hour;
+    int start_min = my_time->tm_min;
+    
+    my_time = localtime(&stop);
+    int end_hour = my_time->tm_hour;
+    int end_min = my_time->tm_min;
+    
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%d:%d - %d:%d (%d)", start_hour, start_min, end_hour, end_min, pause/60);
+    
+    snprintf(
          model->work_time.text,
          sizeof(model->work_time.text),
-         "%02d:%02d - %02d:%02d (%4d)",
-         start_time->tm_hour,
-         start_time->tm_min,
-         end_time->tm_hour,
-         end_time->tm_min,
-         pause);
+         "%02d:%02d - %02d:%02d\n(P %4d m)",
+         start_hour,
+         start_min,
+         end_hour,
+         end_min,
+         pause/60);
 }
 
 void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *model, int32_t hours)
@@ -66,14 +73,30 @@ void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *mode
         minute_part);
 }
 
-void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GDrawCommandImage *image)
+void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GBitmap *image)
 {
-    free(model->icon.draw_command);
-    model->icon.draw_command = image;
-    ttracker_app_main_window_view_model_announce_changed(model);
+    if (0 != image)
+    {
+        if (0 != model->icon.draw_command)
+        {
+            gbitmap_destroy(model->icon.draw_command);
+        }
+        else
+        {
+            APP_LOG(APP_LOG_LEVEL_DEBUG, "Bitmap was already 0");          
+        }
+        
+        model->icon.draw_command = image;
+        ttracker_app_main_window_view_model_announce_changed(model);
+    }
+    else
+    {
+        model->icon.draw_command = 0;
+    }
 }
 
-TTrackerDataViewNumbers ttracker_app_data_point_view_model_times(TTrackerAppDataPoint *data_point) {
+TTrackerDataViewNumbers ttracker_app_data_point_view_model_times(TTrackerAppDataPoint *data_point) 
+{
 
   int time_diff_seconds = data_point->stop - data_point->start - data_point->pause;
 
@@ -122,19 +145,30 @@ GColor  ttracker_app_data_point_color(TTrackerAppDataPoint *data_point)
 
 void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, TTrackerAppDataPoint *data_point)
 {
-  TTrackerAppMainWindowViewModelFunc annouce_changed = model->announce_changed;
-  memset(model, 0, sizeof(*model));
-  model->announce_changed = annouce_changed;
-  ttracker_app_view_model_fill_strings_and_pagination(model, data_point);
-  ttracker_app_view_model_set_icon(model, ttracker_app_resources_get_icon());
-  ttracker_app_view_model_fill_colors(model, ttracker_app_data_point_color(data_point));
-  ttracker_view_model_fill_numbers(model, ttracker_app_data_point_view_model_times(data_point));
+    TTrackerAppMainWindowViewModelFunc annouce_changed = model->announce_changed;
+    GBitmap* image = model->icon.draw_command;
+    
+    memset(model, 0, sizeof(*model));
+    gbitmap_destroy(image);
+    
+    model->announce_changed = annouce_changed;
+    ttracker_app_view_model_fill_strings_and_pagination(model, data_point);
+    ttracker_app_view_model_set_icon(model, ttracker_app_resources_get_icon());
+    ttracker_app_view_model_fill_colors(model, ttracker_app_data_point_color(data_point));
+    ttracker_view_model_fill_numbers(model, ttracker_app_data_point_view_model_times(data_point));
 
-  ttracker_app_main_window_view_model_announce_changed(model);
+    ttracker_app_main_window_view_model_announce_changed(model);
 }
 
-void ttracker_app_view_model_deinit(TTrackerAppMainWindowViewModel *model) {
-  ttracker_app_view_model_set_icon(model, NULL);
+void ttracker_app_view_model_deinit(TTrackerAppMainWindowViewModel *model) 
+{
+    GBitmap* image = model->icon.draw_command;
+    
+    ttracker_app_view_model_set_icon(model, NULL);
+
+    gbitmap_destroy(image);      
+
+
 }
 
 static TTrackerAppDataPoint s_data_points[] = {

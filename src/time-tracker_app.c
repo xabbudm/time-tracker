@@ -55,16 +55,21 @@ static void horizontal_ruler_update_proc(Layer *layer, GContext *ctx) {
   graphics_draw_line(ctx, GPoint(0, yy), GPoint(bounds.size.w, yy));
 }
 
-static void icon_layer_update_proc(Layer *layer, GContext *ctx) {
-  TTrackerAppData *data = window_get_user_data(s_main_window);
-  TTrackerAppMainWindowViewModel *model = &data->view_model;
-  GDrawCommandImage *original_icon = model->icon.draw_command;
-  if (!original_icon) {
-    return;
-  }
+static void icon_layer_update_proc(Layer *layer, GContext *ctx) 
+{
+    TTrackerAppData *data = window_get_user_data(s_main_window);
+    TTrackerAppMainWindowViewModel *model = &data->view_model;
+    GBitmap *original_icon = model->icon.draw_command;
+    if (!original_icon)
+    {
+        return;
+    }
 
-  graphics_context_set_antialiased(ctx, true);
-  gdraw_command_image_draw(ctx, original_icon, GPoint(0, 0));
+    //graphics_context_set_antialiased(ctx, true);
+    GRect img_bounds = layer_get_bounds(layer);
+    
+    graphics_draw_bitmap_in_rect(ctx, original_icon, img_bounds);
+    
 }
 
 ////////////////////
@@ -114,43 +119,46 @@ static void view_model_changed(struct TTrackerAppMainWindowViewModel *arg) {
   layer_mark_dirty(window_get_root_layer(s_main_window));
 }
 
-static void main_window_load(Window *window) {
-  TTrackerAppData *data = window_get_user_data(window);
-  data->view_model.announce_changed = view_model_changed;
+static void main_window_load(Window *window) 
+{
+    TTrackerAppData *data = window_get_user_data(window);
+    data->view_model.announce_changed = view_model_changed;
 
-  Layer *window_layer = window_get_root_layer(window);
-  const GRect bounds = layer_get_bounds(window_layer);
-  layer_set_update_proc(window_layer, bg_update_proc);
+    Layer *window_layer = window_get_root_layer(window);
+    const GRect bounds = layer_get_bounds(window_layer);
+    layer_set_update_proc(window_layer, bg_update_proc);
 
-  data->horizontal_ruler_layer = layer_create(GRect(MARGIN, 40, bounds.size.w - 2 * MARGIN, 20));
-  layer_set_update_proc(data->horizontal_ruler_layer, horizontal_ruler_update_proc);
-  layer_add_child(window_layer, data->horizontal_ruler_layer);
+    data->horizontal_ruler_layer = layer_create(GRect(MARGIN, 40, bounds.size.w - 2 * MARGIN, 20));
+    layer_set_update_proc(data->horizontal_ruler_layer, horizontal_ruler_update_proc);
+    layer_add_child(window_layer, data->horizontal_ruler_layer);
 
-  const int16_t narrow_buffer = 5; // current whitespacing would trim 3-digit temperature otherwise
-  const int16_t narrow = ICON_DIMENSIONS + 2 - narrow_buffer;
-  init_text_layer(window_layer, &data->day_of_week_layer, 23, 30, 0, FONT_KEY_GOTHIC_18_BOLD);
-  const int16_t temperature_top = 49;
-  init_text_layer(window_layer, &data->work_time_layer, temperature_top, 40, narrow, FONT_KEY_LECO_38_BOLD_NUMBERS);
-  init_text_layer(window_layer, &data->start_stop_time_layer, 91, 19, narrow, FONT_KEY_GOTHIC_14);
-  const int16_t description_top = 108;
-  const int16_t description_height = bounds.size.h - description_top;
-  init_text_layer(window_layer, &data->description_layer, description_top, description_height, 0, FONT_KEY_GOTHIC_24_BOLD);
+    const int16_t narrow_buffer = 5; // current whitespacing would trim 3-digit temperature otherwise
+    const int16_t narrow = ICON_DIMENSIONS + 2 - narrow_buffer;
+    init_text_layer(window_layer, &data->day_of_week_layer, 23, 30, 0, FONT_KEY_GOTHIC_18_BOLD);
+    const int16_t temperature_top = 49;
+    init_text_layer(window_layer, &data->work_time_layer, temperature_top, 40, narrow, FONT_KEY_GOTHIC_28);
+    init_text_layer(window_layer, &data->start_stop_time_layer, 91, 30, narrow, FONT_KEY_GOTHIC_14);
+    text_layer_enable_screen_text_flow_and_paging(data->start_stop_time_layer, GTextOverflowModeWordWrap);
+    
+    const int16_t description_top = 128;
+    const int16_t description_height = bounds.size.h - description_top;
+    init_text_layer(window_layer, &data->description_layer, description_top, description_height, 0, FONT_KEY_GOTHIC_24_BOLD);
 
-  GRect icon_rect = GRect(0, 0, ICON_DIMENSIONS, ICON_DIMENSIONS);
-  GRect alignment_rect = GRect(0, temperature_top + 10, bounds.size.w - MARGIN, 10);
-  grect_align(&icon_rect, &alignment_rect, GAlignTopRight, false);
-  data->icon_layer = layer_create(icon_rect);
-  layer_set_update_proc(data->icon_layer, icon_layer_update_proc);
-  layer_add_child(window_layer, data->icon_layer);
+    GRect icon_rect = GRect(0, 0, ICON_DIMENSIONS, ICON_DIMENSIONS);
+    GRect alignment_rect = GRect(0, temperature_top + 10, bounds.size.w - MARGIN, 10);
+    grect_align(&icon_rect, &alignment_rect, GAlignTopRight, false);
+    data->icon_layer = layer_create(icon_rect);
+    layer_set_update_proc(data->icon_layer, icon_layer_update_proc);
+    layer_add_child(window_layer, data->icon_layer);
 
-  init_statusbar_text_layer(window_layer, &data->fake_statusbar);
-  text_layer_set_text(data->fake_statusbar, "9:41 AM");
+    init_statusbar_text_layer(window_layer, &data->fake_statusbar);
+    text_layer_set_text(data->fake_statusbar, "9:41 AM");
 
-  init_statusbar_text_layer(window_layer, &data->pagination_layer);
-  text_layer_set_text_alignment(data->pagination_layer, GTextAlignmentRight);
+    init_statusbar_text_layer(window_layer, &data->pagination_layer);
+    text_layer_set_text_alignment(data->pagination_layer, GTextAlignmentRight);
 
-  // propagate all view model content to the UI
-  ttracker_app_main_window_view_model_announce_changed(&data->view_model);
+    // propagate all view model content to the UI
+    ttracker_app_main_window_view_model_announce_changed(&data->view_model);
 }
 
 static void main_window_unload(Window *window) {
@@ -161,7 +169,7 @@ static void main_window_unload(Window *window) {
   layer_destroy(data->horizontal_ruler_layer);
   text_layer_destroy(data->day_of_week_layer);
   text_layer_destroy(data->work_time_layer);
-  text_layer_destroy(data->start_stop_time_layer;
+  text_layer_destroy(data->start_stop_time_layer);
   text_layer_destroy(data->description_layer);
   layer_destroy(data->icon_layer);
   text_layer_destroy(data->fake_statusbar);
@@ -180,8 +188,6 @@ static void ask_for_scroll(TTrackerAppData *data, ScrollDirection direction)
 
     int delta = direction == ScrollDirectionUp ? -1 : +1;
     TTrackerAppDataPoint *next_data_point = ttracker_app_data_point_delta(data->data_point, delta);
-
-    Animation *scroll_animation;
 
     if (next_data_point)
     {
@@ -210,7 +216,7 @@ static void init() {
   TTrackerAppData *data = malloc(sizeof(TTrackerAppData));
   memset(data, 0, sizeof(TTrackerAppData));
 
-  TTrackerAppData *dp = ttracker_app_data_point_at(0);
+  TTrackerAppDataPoint *dp = ttracker_app_data_point_at(0);
   set_data_point(data, dp);
 
   s_main_window = window_create();
@@ -223,8 +229,12 @@ static void init() {
   window_stack_push(s_main_window, true);
 }
 
-static void deinit() {
-  window_destroy(s_main_window);
+static void deinit() 
+{
+    TTrackerAppData* data = window_get_user_data(s_main_window);
+    
+    window_destroy(s_main_window);
+    free(data);    
 }
 
 
