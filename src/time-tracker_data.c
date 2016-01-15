@@ -38,21 +38,22 @@ void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *mode
 
     struct tm* my_time = localtime(&start);
     int start_hour = my_time->tm_hour;
-    int start_minute = my_time->tm_min;
+    int start_min = my_time->tm_min;
     
     my_time = localtime(&stop);
     int end_hour = my_time->tm_hour;
     int end_min = my_time->tm_min;
     
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%d:%d - %d:%d (%d)", start_hour, start_min, end_hour, end_min, pause/60);
     
     snprintf(
          model->work_time.text,
          sizeof(model->work_time.text),
-         "%02d:%02d - %02d:%02d (%4d)",
-         start_time->tm_hour,
-         start_time->tm_min,
-         end_time->tm_hour,
-         end_time->tm_min,
+         "%02d:%02d - %02d:%02d\n(P %4d m)",
+         start_hour,
+         start_min,
+         end_hour,
+         end_min,
          pause/60);
 }
 
