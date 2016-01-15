@@ -9,7 +9,7 @@
     "resources": {
         "media": [
             {
-                "file": "data/pebble_calendar_template.png",
+                "file": "images/pebble_calendar_template.png",
                 "name": "ICON_CALENDAR_ITEM",
                 "type": "bitmap"
             }
