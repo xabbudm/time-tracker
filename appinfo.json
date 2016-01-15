@@ -9,9 +9,9 @@
     "resources": {
         "media": [
             {
-                "file": "data/pebble_calendar_template.pdc",
+                "file": "data/pebble_calendar_template.png",
                 "name": "ICON_CALENDAR_ITEM",
-                "type": "raw"
+                "type": "bitmap"
             }
         ]
     },

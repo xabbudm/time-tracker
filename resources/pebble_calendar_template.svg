@@ -13,17 +13,13 @@
    id="Ebene_1"
    x="0px"
    y="0px"
-   width="39.878px"
-   height="38.051px"
-   viewBox="0 0 39.878 38.051"
+   width="50.000004"
+   height="50"
+   viewBox="0 0 50.000006 50.000002"
    enable-background="new 0 0 39.878 38.051"
    xml:space="preserve"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="pebble_calendar_template.svg"><metadata
-   id="metadata25"><rdf:RDF><cc:Work
-       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-   id="defs23" /><sodipodi:namedview
+   sodipodi:docname="pebble_calendar_template.png"><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -32,66 +28,72 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="936"
-   inkscape:window-height="480"
+   inkscape:window-width="1600"
+   inkscape:window-height="959"
    id="namedview21"
    showgrid="false"
    inkscape:zoom="6.2022025"
    inkscape:cx="19.938999"
-   inkscape:cy="24.769056"
-   inkscape:window-x="0"
+   inkscape:cy="24.769058"
+   inkscape:window-x="87"
    inkscape:window-y="0"
    inkscape:window-maximized="0"
-   inkscape:current-layer="Ebene_1" />
-<rect
-   y="-11.78869"
-   width="50.000004"
-   height="49.839691"
-   id="rect3"
-   x="0" />
-<polygon
-   points="4.05,33.508 4.05,7.286 35.828,7.286 35.828,29.692 31.684,33.508 "
-   id="polygon5"
-   transform="matrix(1.2538243,0,0,1.3140259,0,-11.949001)"
-   style="fill:#ffffff" />
+   inkscape:current-layer="Ebene_1"
+   fit-margin-top="0"
+   fit-margin-left="0"
+   fit-margin-right="0"
+   fit-margin-bottom="0" /><metadata
+   id="metadata25"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+   id="defs23">
+	
+	
+</defs>
+
+
+
+
+
+
 <g
-   id="g7"
-   transform="matrix(1.2538243,0,0,1.3140259,0,-11.949001)">
-	<path
-   d="M 9.285,26.139 H 12.569 V 16.495 L 9.514,17.251 V 14.604 L 12.589,13.868 H 15.425 V 26.139 H 18.709 V 28.726 H 9.285 V 26.139 z"
-   id="path9"
-   inkscape:connector-curvature="0" />
-	<path
-   d="M 24.004,26.139 H 30.264 V 28.726 H 20.83 V 26.218 L 22.422,24.526 C 24.313,22.516 25.461,21.278 25.865,20.814 26.363,20.243 26.721,19.737 26.94,19.296 27.159,18.855 27.269,18.419 27.269,17.987 27.269,17.324 27.068,16.811 26.667,16.449 26.265,16.088 25.697,15.907 24.96,15.907 24.436,15.907 23.847,16.011 23.194,16.22 22.54,16.429 21.859,16.733 21.149,17.131 V 14.394 C 21.859,14.136 22.554,13.938 23.234,13.802 23.914,13.666 24.566,13.598 25.19,13.598 26.762,13.598 27.998,13.965 28.897,14.698 29.796,15.431 30.246,16.431 30.246,17.698 30.246,18.282 30.148,18.829 29.953,19.34 29.757,19.851 29.42,20.418 28.943,21.042 28.591,21.494 27.626,22.508 26.047,24.087 25.188,24.944 24.508,25.628 24.004,26.139 z"
-   id="path11"
-   inkscape:connector-curvature="0" />
-</g>
-<rect
-   x="16.784946"
-   width="4.6905565"
-   height="5.6989303"
-   id="rect13"
-   y="-11.949001"
-   style="fill:#ffffff" />
-<rect
-   x="28.484381"
-   width="4.6905565"
-   height="5.6989303"
-   id="rect15"
-   y="-11.949001"
-   style="fill:#ffffff" />
-<rect
-   x="40.183815"
-   width="4.6905565"
-   height="5.6989303"
-   id="rect17"
-   y="-11.949001"
-   style="fill:#ffffff" />
-<rect
-   x="5.0855117"
-   width="4.6905565"
-   height="5.6989303"
-   id="rect19"
-   y="-11.949001"
-   style="fill:#ffffff" />
+   id="g3017"
+   transform="translate(0,11.949001)"><path
+     d="M 0,-11.78869 50.000004,-11.78869 50.000004,38.051002 0,38.051002 z"
+     id="rect3"
+     inkscape:connector-curvature="0" /><polygon
+     points="31.684,33.508 4.05,33.508 4.05,7.286 35.828,7.286 35.828,29.692 "
+     id="polygon5"
+     transform="matrix(1.2538243,0,0,1.3140259,0,-11.949001)"
+     style="fill:#ffffff" /><path
+     inkscape:connector-curvature="0"
+     id="path9"
+     d="M 11.641759,22.398322 H 15.759318 V 9.7258562 L 11.928884,10.71926 V 7.2410332 L 15.784394,6.2739102 H 19.34024 V 22.398322 H 23.457799 V 25.797707 H 11.641759 V 22.398322 z" /><path
+     inkscape:connector-curvature="0"
+     id="path11"
+     d="M 30.096798,22.398322 H 37.945739 V 25.797707 H 26.11716 V 22.50213 L 28.113248,20.278798 C 30.48423,17.637606 31.923621,16.010842 32.430166,15.401134 33.05457,14.650825 33.503439,13.985928 33.778027,13.406443 34.052614,12.826957 34.190535,12.254042 34.190535,11.686383 34.190535,10.815184 33.938516,10.141088 33.435733,9.665411 32.931695,9.1910477 32.219523,8.953209 31.295455,8.953209 30.638451,8.953209 29.899948,9.0898677 29.081201,9.3644991 28.2612,9.6391305 27.407345,10.038594 26.51713,10.561577 V 6.9650878 C 27.407345,6.6260691 28.278753,6.365892 29.131354,6.1871845 29.983954,6.0084769 30.801448,5.9191232 31.583834,5.9191232 33.554846,5.9191232 35.104573,6.4013707 36.231761,7.3645517 37.358949,8.3277327 37.92317,9.6417586 37.92317,11.306629 37.92317,12.074021 37.800295,12.792793 37.555799,13.46426 37.31005,14.135727 36.887511,14.88078 36.289437,15.700732 35.848091,16.294672 34.63815,17.627094 32.658362,19.701941 31.581326,20.828061 30.728726,21.726855 30.096798,22.398322 z" /><rect
+     x="16.784946"
+     width="4.6905565"
+     height="5.6989303"
+     id="rect13"
+     y="-11.949001"
+     style="fill:#ffffff" /><rect
+     x="28.484381"
+     width="4.6905565"
+     height="5.6989303"
+     id="rect15"
+     y="-11.949001"
+     style="fill:#ffffff" /><rect
+     x="40.183815"
+     width="4.6905565"
+     height="5.6989303"
+     id="rect17"
+     y="-11.949001"
+     style="fill:#ffffff" /><rect
+     x="5.0855117"
+     width="4.6905565"
+     height="5.6989303"
+     id="rect19"
+     y="-11.949001"
+     style="fill:#ffffff" /></g>
 </svg>
