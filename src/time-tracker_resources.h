@@ -20,4 +20,4 @@
      
 #include <pebble.h>
 
-GDrawCommandImage *ttracker_app_resources_get_icon();
+GBitmap  *ttracker_app_resources_get_icon();

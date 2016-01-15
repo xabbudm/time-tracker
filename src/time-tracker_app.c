@@ -55,16 +55,21 @@ static void horizontal_ruler_update_proc(Layer *layer, GContext *ctx) {
   graphics_draw_line(ctx, GPoint(0, yy), GPoint(bounds.size.w, yy));
 }
 
-static void icon_layer_update_proc(Layer *layer, GContext *ctx) {
-  TTrackerAppData *data = window_get_user_data(s_main_window);
-  TTrackerAppMainWindowViewModel *model = &data->view_model;
-  GDrawCommandImage *original_icon = model->icon.draw_command;
-  if (!original_icon) {
-    return;
-  }
+static void icon_layer_update_proc(Layer *layer, GContext *ctx) 
+{
+    TTrackerAppData *data = window_get_user_data(s_main_window);
+    TTrackerAppMainWindowViewModel *model = &data->view_model;
+    GBitmap *original_icon = model->icon.draw_command;
+    if (!original_icon)
+    {
+        return;
+    }
 
-  graphics_context_set_antialiased(ctx, true);
-  gdraw_command_image_draw(ctx, original_icon, GPoint(0, 0));
+    //graphics_context_set_antialiased(ctx, true);
+    GRect img_bounds = layer_get_bounds(layer);
+    
+    graphics_draw_bitmap_in_rect(ctx, original_icon, img_bounds);
+    
 }
 
 ////////////////////
@@ -130,7 +135,7 @@ static void main_window_load(Window *window) {
   const int16_t narrow = ICON_DIMENSIONS + 2 - narrow_buffer;
   init_text_layer(window_layer, &data->day_of_week_layer, 23, 30, 0, FONT_KEY_GOTHIC_18_BOLD);
   const int16_t temperature_top = 49;
-  init_text_layer(window_layer, &data->work_time_layer, temperature_top, 40, narrow, FONT_KEY_LECO_38_BOLD_NUMBERS);
+  init_text_layer(window_layer, &data->work_time_layer, temperature_top, 40, narrow, FONT_KEY_GOTHIC_28);
   init_text_layer(window_layer, &data->start_stop_time_layer, 91, 19, narrow, FONT_KEY_GOTHIC_14);
   const int16_t description_top = 108;
   const int16_t description_height = bounds.size.h - description_top;
@@ -161,7 +166,7 @@ static void main_window_unload(Window *window) {
   layer_destroy(data->horizontal_ruler_layer);
   text_layer_destroy(data->day_of_week_layer);
   text_layer_destroy(data->work_time_layer);
-  text_layer_destroy(data->start_stop_time_layer;
+  text_layer_destroy(data->start_stop_time_layer);
   text_layer_destroy(data->description_layer);
   layer_destroy(data->icon_layer);
   text_layer_destroy(data->fake_statusbar);
@@ -180,8 +185,6 @@ static void ask_for_scroll(TTrackerAppData *data, ScrollDirection direction)
 
     int delta = direction == ScrollDirectionUp ? -1 : +1;
     TTrackerAppDataPoint *next_data_point = ttracker_app_data_point_delta(data->data_point, delta);
-
-    Animation *scroll_animation;
 
     if (next_data_point)
     {
@@ -210,7 +213,7 @@ static void init() {
   TTrackerAppData *data = malloc(sizeof(TTrackerAppData));
   memset(data, 0, sizeof(TTrackerAppData));
 
-  TTrackerAppData *dp = ttracker_app_data_point_at(0);
+  TTrackerAppDataPoint *dp = ttracker_app_data_point_at(0);
   set_data_point(data, dp);
 
   s_main_window = window_create();
@@ -223,8 +226,12 @@ static void init() {
   window_stack_push(s_main_window, true);
 }
 
-static void deinit() {
-  window_destroy(s_main_window);
+static void deinit() 
+{
+    TTrackerAppData* data = window_get_user_data(s_main_window);
+    
+    window_destroy(s_main_window);
+    free(data);    
 }
 
 

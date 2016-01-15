@@ -17,8 +17,13 @@
 #include <pebble.h>
 #include "time-tracker_resources.h"
 
-GDrawCommandImage *ttracker_app_resources_get_icon() 
+GBitmap  *ttracker_app_resources_get_icon() 
 {
-    return gdraw_command_image_create_with_resource(RESOURCE_ID_ICON_CALENDAR_ITEM);    
+    GBitmap* image = gbitmap_create_with_resource(RESOURCE_ID_ICON_CALENDAR_ITEM);
+    
+    GRect bounds = gbitmap_get_bounds(image);
+    
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "image has size %d x %d", bounds.size.w, bounds.size.h);
+    return image;
 }
     

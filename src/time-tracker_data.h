@@ -35,7 +35,7 @@ typedef struct {
     char text[8];
   } work_hours;
   struct {
-    GDrawCommandImage *draw_command;
+    GBitmap  *draw_command;
     int32_t to_square_normalized;
   } icon;
   struct {
@@ -77,7 +77,7 @@ typedef struct
 void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, uint16_t pause);
 
 void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *model, int32_t hours);
-void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GDrawCommandImage *image);
+void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GBitmap *image);
 
 TTrackerDataViewNumbers ttracker_app_data_point_view_model_times(TTrackerAppDataPoint *data_point);
 
