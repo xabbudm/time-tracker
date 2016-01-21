@@ -9,10 +9,10 @@
 // BEGIN AUTO-GENERATED UI CODE; DO NOT MODIFY
 static Window *s_window;
 static GFont s_res_gothic_18_bold;
-static MenuLayer *s_menulayer;
+static MenuLayer *s_menu_layer;
 static TextLayer *s_heading_layer;
 
-tatic uint16_t get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *context) {
+static uint16_t get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *context) {
   return NUM_MENU_ENTRIES;
 }
 
@@ -70,8 +70,8 @@ static void initialise_ui(void) {
 
   s_res_gothic_18_bold = fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD);
   // s_menulayer
-  s_menulayer = menu_layer_create(GRect(5, 30, 130, 115));
-  menu_layer_set_click_config_onto_window(s_menulayer, s_window);
+  s_menu_layer = menu_layer_create(GRect(5, 30, 130, 115));
+  menu_layer_set_click_config_onto_window(s_menu_layer, s_window);
 
   #if defined(PBL_COLOR)
   menu_layer_set_normal_colors(s_menu_layer, GColorBlack, GColorWhite);
@@ -84,7 +84,7 @@ static void initialise_ui(void) {
       .select_click = select_callback,
   });
 
-  layer_add_child(window_get_root_layer(s_window), (Layer *)s_menulayer);
+  layer_add_child(window_get_root_layer(s_window), (Layer *)s_menu_layer);
 
   // s_heading_layer
   s_heading_layer = text_layer_create(GRect(10, 5, 125, 24));
@@ -96,7 +96,7 @@ static void initialise_ui(void) {
 
 static void destroy_ui(void) {
   window_destroy(s_window);
-  menu_layer_destroy(s_menulayer);
+  menu_layer_destroy(s_menu_layer);
   text_layer_destroy(s_heading_layer);
 }
 // END AUTO-GENERATED UI CODE

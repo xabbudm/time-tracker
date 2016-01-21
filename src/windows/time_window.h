@@ -9,10 +9,10 @@
 #define TIME_WINDOW_SIZE GSize(128, 34)
 
 typedef struct {
-  int time[TIME_WINDOW_NUM_CELLS];
+  int digits[TIME_WINDOW_NUM_CELLS];
 } TIME;
 
-typedef void (*TimeWindowComplete)(TIME pin, void *context);
+typedef void (*TimeWindowComplete)(TIME time, void *context);
 
 typedef struct TimeWindowCallbacks {
     TimeWindowComplete time_complete;
@@ -27,7 +27,7 @@ typedef struct {
   TimeWindowCallbacks callbacks;
 
   TIME time;
-  char field_buffs[TIME_WINDOW_NUM_CELLS][2];
+  char field_buffs[TIME_WINDOW_NUM_CELLS][3];
   int8_t field_selection;
 } TimeWindow;
 

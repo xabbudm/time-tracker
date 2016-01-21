@@ -2,14 +2,17 @@
 #include "time_window.h"
 #include "../layers/selection_layer.h"
 
-static char* selection_handle_get_text(int index, void *context) {
-  TimeWindow *time_window = (TimeWindow*)context;
-  snprintf(
-    time_window->field_buffs[index],
-    sizeof(time_window->field_buffs[0]), "%d",
-    (int)time_window->time.digits[index]
-  );
-  return time_window->field_buffs[index];
+static char* selection_handle_get_text(int index, void *context) 
+{
+    TimeWindow *time_window = (TimeWindow*)context;
+    snprintf(
+        time_window->field_buffs[index],
+        sizeof(time_window->field_buffs[0]), "%02d",
+        (int)time_window->time.digits[index]
+    );
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", time_window->field_buffs[index]);
+    
+    return time_window->field_buffs[index];
 }
 
 static void selection_handle_complete(void *context) {
@@ -32,7 +35,7 @@ static void selection_handle_inc(int index, uint8_t clicks, void *context) {
   }
   if(time_window->time.digits[index] > threshold)
   {
-      time_window->pin.digits[index] = 0;
+      time_window->time.digits[index] = 0;
   }
 }
 
@@ -96,7 +99,7 @@ TimeWindow* time_window_create(TimeWindowCallbacks callbacks) {
         (bounds.size.w - TIME_WINDOW_SIZE.w) / 2);
       time_window->selection = selection_layer_create(grect_inset(bounds, selection_insets), TIME_WINDOW_NUM_CELLS);
       for (int i = 0; i < TIME_WINDOW_NUM_CELLS; i++) {
-        selection_layer_set_cell_width(time_window->selection, i, 50);
+        selection_layer_set_cell_width(time_window->selection, i, 60);
       }
       selection_layer_set_cell_padding(time_window->selection, 6);
       selection_layer_set_active_bg_color(time_window->selection, GColorRed);
