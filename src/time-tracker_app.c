@@ -19,6 +19,8 @@
 #include "time-tracker_view.h"
 #include "time-tracker_data.h"
 
+#include "windows/time_selection_menue.h"
+
 #define STATUS_BAR_HEIGHT 16
 
 static Window *s_main_window;
@@ -55,7 +57,7 @@ static void horizontal_ruler_update_proc(Layer *layer, GContext *ctx) {
   graphics_draw_line(ctx, GPoint(0, yy), GPoint(bounds.size.w, yy));
 }
 
-static void icon_layer_update_proc(Layer *layer, GContext *ctx) 
+static void icon_layer_update_proc(Layer *layer, GContext *ctx)
 {
     TTrackerAppData *data = window_get_user_data(s_main_window);
     TTrackerAppMainWindowViewModel *model = &data->view_model;
@@ -67,9 +69,9 @@ static void icon_layer_update_proc(Layer *layer, GContext *ctx)
 
     //graphics_context_set_antialiased(ctx, true);
     GRect img_bounds = layer_get_bounds(layer);
-    
+
     graphics_draw_bitmap_in_rect(ctx, original_icon, img_bounds);
-    
+
 }
 
 ////////////////////
@@ -119,7 +121,7 @@ static void view_model_changed(struct TTrackerAppMainWindowViewModel *arg) {
   layer_mark_dirty(window_get_root_layer(s_main_window));
 }
 
-static void main_window_load(Window *window) 
+static void main_window_load(Window *window)
 {
     TTrackerAppData *data = window_get_user_data(window);
     data->view_model.announce_changed = view_model_changed;
@@ -139,7 +141,7 @@ static void main_window_load(Window *window)
     init_text_layer(window_layer, &data->work_time_layer, temperature_top, 40, narrow, FONT_KEY_GOTHIC_28);
     init_text_layer(window_layer, &data->start_stop_time_layer, 91, 30, narrow, FONT_KEY_GOTHIC_14);
     text_layer_enable_screen_text_flow_and_paging(data->start_stop_time_layer, GTextOverflowModeWordWrap);
-    
+
     const int16_t description_top = 128;
     const int16_t description_height = bounds.size.h - description_top;
     init_text_layer(window_layer, &data->description_layer, description_top, description_height, 0, FONT_KEY_GOTHIC_24_BOLD);
@@ -207,6 +209,13 @@ static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
   ask_for_scroll(data, ScrollDirectionDown);
 }
 
+static void select_click_handler(ClickRecognizerRef recognizer, void *context)
+{
+    TTrackerAppData *data = context;
+    show_time_selection_menu();
+
+}
+
 static void click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_UP, up_click_handler);
   window_single_click_subscribe(BUTTON_ID_DOWN, down_click_handler);
@@ -229,12 +238,12 @@ static void init() {
   window_stack_push(s_main_window, true);
 }
 
-static void deinit() 
+static void deinit()
 {
     TTrackerAppData* data = window_get_user_data(s_main_window);
-    
+
     window_destroy(s_main_window);
-    free(data);    
+    free(data);
 }
 
 
