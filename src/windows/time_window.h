@@ -8,8 +8,10 @@
 #define TIME_WINDOW_MINUTES_MAX_VALUE 59
 #define TIME_WINDOW_SIZE GSize(128, 34)
 
-typedef struct {
-  int digits[TIME_WINDOW_NUM_CELLS];
+
+typedef struct 
+{
+    int digits[TIME_WINDOW_NUM_CELLS];
 } TIME;
 
 typedef void (*TimeWindowComplete)(TIME time, void *context);

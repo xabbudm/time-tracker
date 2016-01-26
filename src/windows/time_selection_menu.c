@@ -94,10 +94,12 @@ static void initialise_ui(void) {
   layer_add_child(window_get_root_layer(s_window), (Layer *)s_heading_layer);
 }
 
-static void destroy_ui(void) {
-  window_destroy(s_window);
-  menu_layer_destroy(s_menu_layer);
-  text_layer_destroy(s_heading_layer);
+static void destroy_ui(void) 
+{
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "TimeSelectionMenu unload() called");
+    window_destroy(s_window);
+    menu_layer_destroy(s_menu_layer);
+    text_layer_destroy(s_heading_layer);
 }
 // END AUTO-GENERATED UI CODE
 
