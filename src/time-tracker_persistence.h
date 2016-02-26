@@ -41,13 +41,40 @@
 #define TIME_PERSISTENCE_NOV_SUM_KEY 14
 #define TIME_PERSISTENCE_DEC_SUM_KEY 15
 
-#define TIME_PERSISTENCE_START_TIME_KEY 16
-#define TIME_PERSISTENCE_VALID_START_TIME_KEY 17
+#define TIME_PERSISTENCE_WEEK_TIME_KEY 16
 
-#define TIME_PERSISTENCE_END_TIME_KEY 18
-#define TIME_PERSISTENCE_VALID_END_TIME_KEY 19
+typedef struct TPersistenceTimeTrackerDataPoint
+{
+    char name[16];
+    time_t start_time;
+    time_t stop_time;
+    uint16_t pause_time;
+} __attribute__((__packed__)) TPersistenceTimeTrackerDataPoint;
 
-#define TIME_PERSISTENCE_PAUSE_TIME_KEY 18
-#define TIME_PERSISTENCE_VALID_PAUSE_TIME_KEY 19
+typedef enum
+{
+    TIME_TRACKER_PERSISTENCE_SUCCESS = 0,
+    TIME_TRACKER_PERSISTENCE_NO_START_TIME_SET,
+    TIME_TRACKER_PERSISTENCE_INVALID_DATA,
+    TIME_TRACKER_PERSISTENCE_READ_FAILED,
+    TIME_TRACKER_PERSISTENCE_WRITE_FAILED    
+} ETimeTrackerPersistenceState;
 
-#define 
+void time_tracker_save_time(ETrackingState state, time_t time);
+
+ETimeTrackerPersistenceState time_tracker_save_data_point(TTrackerAppDataPoint* data_point);
+
+ETimeTrackerPersistenceState time_tracker_load_week_data();
+
+ETimeTrackerPersistenceState time_tracker_save_week_data();
+
+void time_tracker_init_for_new_year();
+
+void time_tracker_init_for_new_month();
+
+void time_tracker_init_for_new_week(bool save_persistent);
+
+void time_tracker_init_for_new_day();
+
+void time_tracker_init_from_persistence();
+

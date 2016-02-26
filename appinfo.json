@@ -4,6 +4,7 @@
         ""
     ],
     "companyName": "Daniel Muhle (dmuhle@gmail.com)",
+    "enableMultiJS": false,
     "longName": "time-tracker",
     "projectType": "native",
     "resources": {
