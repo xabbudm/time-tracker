@@ -78,7 +78,7 @@ typedef enum
     START_TIME = 0,
     PAUSE_TIME,
     STOP_TIME
-} ETrackingState
+} ETrackingState;
 
 void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, uint16_t pause);
 

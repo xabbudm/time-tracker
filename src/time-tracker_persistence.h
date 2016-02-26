@@ -43,7 +43,7 @@
 
 #define TIME_PERSISTENCE_WEEK_TIME_KEY 16
 
-typedef struct TPersistenceTimeTrackerDataPoint
+typedef struct 
 {
     char name[16];
     time_t start_time;
