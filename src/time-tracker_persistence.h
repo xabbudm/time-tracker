@@ -43,7 +43,7 @@
 
 #define TIME_PERSISTENCE_WEEK_TIME_KEY 16
 
-typedef struct 
+typedef struct TPersistenceTimeTrackerDataPoint
 {
     char name[16];
     time_t start_time;
@@ -53,14 +53,14 @@ typedef struct
 
 typedef enum
 {
-    TIME_TRACKER_PERSISTENCE_SUCCESS = 0,
+    TIME_TRACKER_PERSISTENCE_SUCCESS,
     TIME_TRACKER_PERSISTENCE_NO_START_TIME_SET,
     TIME_TRACKER_PERSISTENCE_INVALID_DATA,
     TIME_TRACKER_PERSISTENCE_READ_FAILED,
     TIME_TRACKER_PERSISTENCE_WRITE_FAILED    
 } ETimeTrackerPersistenceState;
 
-void time_tracker_save_time(ETrackingState state, time_t time);
+void time_tracker_save_time(int state, time_t time);
 
 ETimeTrackerPersistenceState time_tracker_save_data_point(TTrackerAppDataPoint* data_point);
 

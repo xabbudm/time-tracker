@@ -109,7 +109,7 @@ ETimeTrackerPersistenceState time_tracker_save_data_point(TTrackerAppDataPoint* 
     {
         if (data_point->start > 0)
         {
-            struct tm* tm_data_point = localtime(&(data_point->start);
+	    struct tm* tm_data_point = localtime(&(data_point->start));
         
             // save a copy of start time
             struct tm start_time = *tm_data_point;
@@ -130,7 +130,8 @@ ETimeTrackerPersistenceState time_tracker_save_data_point(TTrackerAppDataPoint* 
             }                        
             
             */
-            TPersistenceTimeTrackerDataPoint* persistence_data_point = &s_data_points[start_time.tm_wday];
+            TPersistenceTimeTrackerDataPoint* persistence_data_point = 
+                &s_data_points[start_time.tm_wday];
             
             persistence_data_point->start_time = data_point->start;
             persistence_data_point->stop_time = data_point->stop;
@@ -147,4 +148,6 @@ ETimeTrackerPersistenceState time_tracker_save_data_point(TTrackerAppDataPoint* 
     {
         return TIME_TRACKER_PERSISTENCE_INVALID_DATA;
     }
+
+    return TIME_TRACKER_PERSISTENCE_SUCCESS;
 }

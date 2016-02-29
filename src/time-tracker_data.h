@@ -73,25 +73,31 @@ typedef struct
 
 } TTrackerDataViewNumbers;
 
-typedef enum
-{
-    START_TIME = 0,
-    PAUSE_TIME,
-    STOP_TIME
-} ETrackingState;
+/* typedef enum ETrackingState */
+/* { */
+/*     START_TIME, */
+/*     PAUSE_TIME, */
+/*     STOP_TIME */
+/* } ETrackingState; */
 
-void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *model, time_t start, time_t stop, uint16_t pause);
+void ttracker_app_view_model_set_work_times(
+					    TTrackerAppMainWindowViewModel *model, 
+					    time_t start, time_t stop, uint16_t pause);
 
 void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *model, int32_t hours);
 void ttracker_app_view_model_set_icon(TTrackerAppMainWindowViewModel *model, GBitmap *image);
 
 TTrackerDataViewNumbers ttracker_app_data_point_view_model_times(TTrackerAppDataPoint *data_point);
 
-void ttracker_app_view_model_fill_strings_and_pagination(TTrackerAppMainWindowViewModel *view_model, TTrackerAppDataPoint *data_point);
+void ttracker_app_view_model_fill_strings_and_pagination(
+							 TTrackerAppMainWindowViewModel *view_model,
+							 TTrackerAppDataPoint *data_point);
 
-void ttracker_view_model_fill_numbers(TTrackerAppMainWindowViewModel *model, TTrackerDataViewNumbers numbers);
+void ttracker_view_model_fill_numbers(TTrackerAppMainWindowViewModel *model, 
+				      TTrackerDataViewNumbers numbers);
 
-void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, TTrackerAppDataPoint *data_point);
+void ttracker_app_view_model_fill_all(TTrackerAppMainWindowViewModel *model, 
+				      TTrackerAppDataPoint *data_point);
 
 void ttracker_app_view_model_fill_colors(TTrackerAppMainWindowViewModel *model, GColor color);
 

@@ -19,9 +19,6 @@
 #include "time-tracker_data.h"
 #include "time-tracker_resources.h"
 
-static const uint32_t SECONDS_PER_HOUR   = 3600;
-static const uint32_t SECONDS_PER_MINUTE =   60;
-
 void ttracker_app_main_window_view_model_announce_changed(TTrackerAppMainWindowViewModel *model)
 {
     if (model->announce_changed)
@@ -59,10 +56,12 @@ void ttracker_app_view_model_set_work_times(TTrackerAppMainWindowViewModel *mode
 
 void ttracker_app_view_model_set_work_hours(TTrackerAppMainWindowViewModel *model, int32_t hours)
 {
+    const int SEC_PER_HOUR = 3600;
+    const int SEC_PER_MINUTE = 60;
     model->work_hours.hours = hours;
 
-    int hour_part = hours / SECONDS_PER_HOUR;
-    int hour_diff = hours - hour_part*SECONDS_PER_HOUR;
+    int hour_part = hours / SEC_PER_HOUR;
+    int hour_diff = hours - hour_part*SEC_PER_HOUR;
 
     int minute_part = hour_diff / SECONDS_PER_MINUTE;
     snprintf(
