@@ -3,6 +3,15 @@
 *.ko
 *.obj
 *.elf
+*.pyc
+build/*
+
+# pebble build
+.lock*
+
+# backup files
+*.bak
+*~
 
 # Precompiled Headers
 *.gch
