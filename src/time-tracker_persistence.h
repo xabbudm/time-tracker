@@ -68,7 +68,7 @@ ETimeTrackerPersistenceState time_tracker_load_week_data();
 
 ETimeTrackerPersistenceState time_tracker_save_week_data();
 
-void time_tracker_init_app_data(TTrackerAppDataPoint* data_point_begin, int number_points);
+int time_tracker_init_app_data(TTrackerAppDataPoint* data_point_begin, int number_points);
 
 void time_tracker_init_for_new_year();
 

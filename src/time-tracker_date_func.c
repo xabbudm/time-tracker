@@ -24,7 +24,7 @@ static int get_week_of_year(time_t date)
 {
     struct tm now_tm = *(localtime(&date));
     
-    int ordinal_date = now_tm.tm_yday;
+    int ordinal_date = now_tm.tm_yday + 1;
     int week_day = 0 == now_tm.tm_wday ? 7 : now_tm.tm_wday; 
     
     int week = (ordinal_date - week_day + 10) / 7; // intentional use of integer arithmetic
@@ -76,7 +76,8 @@ static int get_week_of_year(time_t date)
 
 int time_tracker_get_current_calendar_week()
 {
-    time_t now = time(NULL);
+    time_t now = 0;
+    time(&now);
     
     return get_week_of_year(now);
 }

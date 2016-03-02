@@ -1,6 +1,7 @@
 #include <pebble.h>
-#include "time-tracker_persistence.h"
 
+#include "time-tracker_persistence.h"
+#include "time-tracker_date_func.h"
 
 static TPersistenceTimeTrackerDataPoint s_data_points[] = 
 {
@@ -150,4 +151,49 @@ ETimeTrackerPersistenceState time_tracker_save_data_point(TTrackerAppDataPoint* 
     }
 
     return TIME_TRACKER_PERSISTENCE_SUCCESS;
+}
+
+int time_tracker_init_app_data(TTrackerAppDataPoint* data_point_begin, int number_points)
+{
+    const int current_week = time_tracker_get_current_calendar_week();
+    
+    if (persist_exists(TIME_PERSISTENCE_CURRENT_WEEK_KEY))
+    {
+        int stored_week = persist_read_int(TIME_PERSISTENCE_CURRENT_WEEK_KEY);
+        
+        // check that we are still within a week ...
+        if (current_week == stored_week)
+        {
+           if (time_tracker_load_week_data() != TIME_TRACKER_PERSISTENCE_SUCCESS)
+           {
+               return -1;
+           }   
+        }
+        else    // reset counters
+        {
+            time_tracker_init_for_new_week(true);
+            persist_write_int(TIME_PERSISTENCE_CURRENT_WEEK_KEY, current_week);
+        }
+    }   
+    else    // initial run of software on new devices
+    {
+        time_tracker_init_for_new_week(true);
+        persist_write_int(TIME_PERSISTENCE_CURRENT_WEEK_KEY, current_week);
+        
+    }
+    
+    int i = 0; 
+    TTrackerAppDataPoint* current_data_point = data_point_begin;
+    
+    while (i < number_points && i < sizeof(s_data_points)/sizeof(s_data_points[0]))
+    {
+       current_data_point->start = s_data_points[i].start_time;
+       current_data_point->stop = s_data_points[i].stop_time;
+       current_data_point->pause = s_data_points[i].pause_time;
+       
+       ++current_data_point;
+       ++i;
+    }
+    
+    return 0;
 }
