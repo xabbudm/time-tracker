@@ -14,11 +14,21 @@ typedef struct
     int digits[TIME_WINDOW_NUM_CELLS];
 } TIME;
 
-typedef void (*TimeWindowComplete)(TIME time, void *context);
+typedef enum ETimeState
+{
+    LOG_STARTED,
+    LOG_PAUSED,
+    LOG_FINISHED
+} ETimeState;
+
+
+typedef void (*TimeWindowComplete)(TIME time, ETimeState state, void *context);
 
 typedef struct TimeWindowCallbacks {
     TimeWindowComplete time_complete;
 } TimeWindowCallbacks;
+
+
 
 typedef struct {
   Window *window;
@@ -29,6 +39,7 @@ typedef struct {
   TimeWindowCallbacks callbacks;
 
   TIME time;
+  ETimeState state;
   char field_buffs[TIME_WINDOW_NUM_CELLS][3];
   int8_t field_selection;
 } TimeWindow;
@@ -38,7 +49,7 @@ typedef struct {
  *  time_window_callbacks: callbacks for communication
  *  returns: a pointer to a new TimeWindow structure
  */
-TimeWindow* time_window_create(TimeWindowCallbacks time_window_callbacks);
+TimeWindow* time_window_create(TimeWindowCallbacks time_window_callbacks, ETimeState state);
 
 /*
  * Destroys an existing TimeWindow

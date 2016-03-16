@@ -133,6 +133,7 @@ TimeWindow* time_window_create(TimeWindowCallbacks callbacks, ETimeState state) 
 }
 
 void time_window_destroy(TimeWindow *time_window) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "destroy time window");
   if (time_window) {
     status_bar_layer_destroy(time_window->status);
     selection_layer_destroy(time_window->selection);

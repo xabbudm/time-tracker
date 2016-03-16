@@ -45,25 +45,43 @@ static void time_complete_callback(TIME time, ETimeState state, void *context) {
     switch(state)
     {
         case LOG_STARTED:
-        break;
+            APP_LOG(APP_LOG_LEVEL_INFO, "Logged Start Time was %d:%d", time.digits[0], time.digits[1]);
+            break;
         case LOG_PAUSED:
-        break;
-        case LOG_STOPPED:
-        break;
+            APP_LOG(APP_LOG_LEVEL_INFO, "Logged Pause Time was %d:%d", time.digits[0], time.digits[1]);
+            break;
+        case LOG_FINISHED:
+            APP_LOG(APP_LOG_LEVEL_INFO, "Logged Stop Time was %d:%d", time.digits[0], time.digits[1]);
+            break;
     }    
-    APP_LOG(APP_LOG_LEVEL_INFO, "Time was %d:%d", time.digits[0], time.digits[1]);
+    
     time_window_pop((TimeWindow*)context, true);
+    //time_window_destroy((TimeWindow*)context);
 }
 
 static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *context) {
   switch(cell_index->row) {
     case 0:
+        {
+        TimeWindow *time_window = time_window_create((TimeWindowCallbacks) {
+          .time_complete = time_complete_callback
+        }, LOG_STARTED);
+        time_window_push(time_window, true);
+      }
+      break;
     case 1:
+        {
+        TimeWindow *time_window = time_window_create((TimeWindowCallbacks) {
+          .time_complete = time_complete_callback
+        }, LOG_PAUSED);
+        time_window_push(time_window, true);
+      }
+      break;
     case 2:
         {
         TimeWindow *time_window = time_window_create((TimeWindowCallbacks) {
           .time_complete = time_complete_callback
-        });
+        }, LOG_FINISHED);
         time_window_push(time_window, true);
       }
       break;
@@ -113,8 +131,10 @@ static void destroy_ui(void)
 }
 // END AUTO-GENERATED UI CODE
 
-static void handle_window_unload(Window* window) {
-  destroy_ui();
+static void handle_window_unload(Window* window) 
+{
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Selection Menu - window_unload called");
+    destroy_ui();
 }
 
 void show_time_selection_menu(void) {
@@ -125,6 +145,8 @@ void show_time_selection_menu(void) {
   window_stack_push(s_window, true);
 }
 
-void hide_time_selection_menu(void) {
-  window_stack_remove(s_window, true);
+void hide_time_selection_menu(void) 
+{
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Selection Menu - hide_selection_menu called");
+    window_stack_remove(s_window, true);
 }
