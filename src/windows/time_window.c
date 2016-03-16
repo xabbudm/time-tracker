@@ -10,14 +10,14 @@ static char* selection_handle_get_text(int index, void *context)
         sizeof(time_window->field_buffs[0]), "%02d",
         (int)time_window->time.digits[index]
     );
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", time_window->field_buffs[index]);
+    //APP_LOG(APP_LOG_LEVEL_DEBUG, "%s", time_window->field_buffs[index]);
     
     return time_window->field_buffs[index];
 }
 
 static void selection_handle_complete(void *context) {
   TimeWindow *time_window = (TimeWindow*)context;
-  time_window->callbacks.time_complete(time_window->time, time_window);
+  time_window->callbacks.time_complete(time_window->time, time_window->state, time_window);
 }
 
 static void selection_handle_inc(int index, uint8_t clicks, void *context) {
@@ -62,7 +62,7 @@ static void selection_handle_dec(int index, uint8_t clicks, void *context)
     }
 }
 
-TimeWindow* time_window_create(TimeWindowCallbacks callbacks) {
+TimeWindow* time_window_create(TimeWindowCallbacks callbacks, ETimeState state) {
     TimeWindow *time_window = (TimeWindow*)malloc(sizeof(TimeWindow));
     if (time_window) {
         time_window->window = window_create();
@@ -73,6 +73,7 @@ TimeWindow* time_window_create(TimeWindowCallbacks callbacks) {
             struct tm* current_tm = localtime(&current_time);
             
             time_window->field_selection = 0;
+            time_window->state = state;
             time_window->time.digits[0] = current_tm->tm_hour;
             time_window->time.digits[1] = current_tm->tm_min;
 //            for(int i = 0; i < TIME_WINDOW_NUM_CELLS; i++) {

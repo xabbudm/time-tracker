@@ -185,7 +185,7 @@ int time_tracker_init_app_data(TTrackerAppDataPoint* data_point_begin, int numbe
     int i = 0; 
     TTrackerAppDataPoint* current_data_point = data_point_begin;
     
-    while (i < number_points && i < sizeof(s_data_points)/sizeof(s_data_points[0]))
+    while ((i < number_points) && (i < (int)(sizeof(s_data_points)/sizeof(s_data_points[0]))))
     {
        current_data_point->start = s_data_points[i].start_time;
        current_data_point->stop = s_data_points[i].stop_time;

@@ -40,9 +40,19 @@ static int16_t get_cell_height_callback(struct MenuLayer *menu_layer, MenuIndex 
 }
 
 
-static void time_complete_callback(TIME time, void *context) {
-  APP_LOG(APP_LOG_LEVEL_INFO, "Time was %d:%d", time.digits[0], time.digits[1]);
-  time_window_pop((TimeWindow*)context, true);
+static void time_complete_callback(TIME time, ETimeState state, void *context) {
+
+    switch(state)
+    {
+        case LOG_STARTED:
+        break;
+        case LOG_PAUSED:
+        break;
+        case LOG_STOPPED:
+        break;
+    }    
+    APP_LOG(APP_LOG_LEVEL_INFO, "Time was %d:%d", time.digits[0], time.digits[1]);
+    time_window_pop((TimeWindow*)context, true);
 }
 
 static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *context) {
