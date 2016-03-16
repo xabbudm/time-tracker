@@ -60,10 +60,11 @@ static void time_complete_callback(TIME time, ETimeState state, void *context) {
 }
 
 static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *context) {
+  TimeWindow *time_window = 0;
   switch(cell_index->row) {
     case 0:
         {
-        TimeWindow *time_window = time_window_create((TimeWindowCallbacks) {
+        time_window = time_window_create((TimeWindowCallbacks) {
           .time_complete = time_complete_callback
         }, LOG_STARTED);
         time_window_push(time_window, true);
@@ -71,7 +72,7 @@ static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index,
       break;
     case 1:
         {
-        TimeWindow *time_window = time_window_create((TimeWindowCallbacks) {
+        time_window = time_window_create((TimeWindowCallbacks) {
           .time_complete = time_complete_callback
         }, LOG_PAUSED);
         time_window_push(time_window, true);
@@ -79,7 +80,7 @@ static void select_callback(struct MenuLayer *menu_layer, MenuIndex *cell_index,
       break;
     case 2:
         {
-        TimeWindow *time_window = time_window_create((TimeWindowCallbacks) {
+        time_window = time_window_create((TimeWindowCallbacks) {
           .time_complete = time_complete_callback
         }, LOG_FINISHED);
         time_window_push(time_window, true);

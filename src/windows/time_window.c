@@ -145,8 +145,24 @@ void time_window_destroy(TimeWindow *time_window) {
   }
 }
 
-void time_window_push(TimeWindow *time_window, bool animated) {
-  window_stack_push(time_window->window, animated);
+static void time_window_unload(Window* window)
+{
+    TimeWindow* time_window = window_get_user_data(window);
+    
+    if (time_window)
+    {
+        time_window_destroy(time_window);
+    }
+}
+
+void time_window_push(TimeWindow *time_window, bool animated) 
+{
+    window_set_user_data(time_window->window, time_window);
+  
+    window_set_window_handlers(time_window->window, (WindowHandlers) {
+    .unload = time_window_unload, });
+
+    window_stack_push(time_window->window, animated);
 }
 
 void time_window_pop(TimeWindow *time_window, bool animated) {
