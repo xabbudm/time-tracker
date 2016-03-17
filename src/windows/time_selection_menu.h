@@ -45,7 +45,6 @@ static TextLayer *s_heading_layer;
 
 typedef struct 
 {
-    Window *window;
     TextLayer *heading_layer;
     MenuLayer *menu_layer;
     TimeSelectionWindowCallbacks callbacks;
@@ -62,25 +61,25 @@ void hide_time_selection_menu(void);
  *  time_window_callbacks: callbacks for communication
  *  returns: a pointer to a new TimeWindow structure
  */
-//TimeSelectionWindow* time_selection_menu_create(TimeWindowCallbacks time_window_callbacks, ETimeState state);
+TimeSelectionWindow* time_selection_menu_create(TimeSelectionWindowCallbacks callbacks);
 
 /*
  * Destroys an existing TimeWindow
  *  time_window: a pointer to the TimeWindow being destroyed
  */
-//void time_selection_menu_destroy(TimeSelectionWindow *time_selection_window);
+void time_selection_menu_destroy(TimeSelectionWindow *time_selection_window);
 
 /*
  * Push the window onto the stack
  *  time_window: a pointer to the TimeWindow being pushed
  *  animated: whether to animate the push or not
  */
-//void time_selection_menu_push(TimeSelectionWindow *time_selection_window, bool animated);
+void time_selection_menu_push(TimeSelectionWindow *time_selection_window, bool animated);
 
 /*
  * Pop the window off the stack
  *  time_window: a pointer to the TimeWindow to pop
  *  animated: whether to animate the pop or not
  */
-//void time_selection_menu_pop(TimeSelectionWindow *time_selection_window, bool animated);
+void time_selection_menu_pop(TimeSelectionWindow *time_selection_window, bool animated);
 
